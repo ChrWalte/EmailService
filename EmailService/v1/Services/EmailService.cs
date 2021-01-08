@@ -19,7 +19,7 @@ namespace EmailService.v1.Services
         private readonly CertificateInformation _information;
         private readonly bool _useCustomCertificateValidationCallback;
 
-        public EmailService(EmailCredentials credentials, CertificateInformation information, bool useCustomCertificateValidationCallback = false)
+        public EmailService(EmailCredentials credentials, CertificateInformation information = null, bool useCustomCertificateValidationCallback = false)
         {
             _credentials = credentials;
             _information = information;
@@ -133,10 +133,10 @@ namespace EmailService.v1.Services
 
         private bool IsValidCertificate(X509Certificate2 certificate)
         {
-            return _information.CertificateName == certificate.GetNameInfo(X509NameType.SimpleName, false)
-                   && _information.CertificateFingerPrint == certificate.Thumbprint
-                   && _information.CertificateSerial == certificate.SerialNumber
-                   && _information.CertificateIssuer == certificate.Issuer;
+            return _information?.CertificateName == certificate.GetNameInfo(X509NameType.SimpleName, false)
+                   && _information?.CertificateFingerPrint == certificate.Thumbprint
+                   && _information?.CertificateSerial == certificate.SerialNumber
+                   && _information?.CertificateIssuer == certificate.Issuer;
         }
     }
 }
