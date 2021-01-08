@@ -5,6 +5,6 @@ namespace EmailService.v1.Interfaces
 {
     public interface IEmailService
     {
-        Task<SendResponse> SendEmail(EmailContent content, EmailCredentials credentials);
+        Task<SendResponse> SendEmail(EmailContent content);
     }
 }
