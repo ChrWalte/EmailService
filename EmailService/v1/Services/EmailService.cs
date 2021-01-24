@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using EmailService.v1.Entities;
+﻿using EmailService.v1.Entities;
 using EmailService.v1.Interfaces;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace EmailService.v1.Services
 {
@@ -58,7 +58,7 @@ namespace EmailService.v1.Services
             email.Subject = content.Subject;
 
             email.Body = new TextPart((TextFormat)content.BodyType)
-                { Text = content.Body };
+            { Text = content.Body };
 
             return email;
         }
@@ -72,7 +72,7 @@ namespace EmailService.v1.Services
             if (namesAsList.Count != addressesAsList.Count) return null;
 
             var internetAddresses = new List<InternetAddress>();
-            
+
             var count = namesAsList.Count;
 
             for (var i = 0; i < count; i++)
@@ -87,9 +87,8 @@ namespace EmailService.v1.Services
         private async Task<SmtpClient> ConstructClient()
         {
             var smtpClient = _useCustomCertificateValidationCallback
-                ? new SmtpClient {ServerCertificateValidationCallback = CertificateValidationCallback}
+                ? new SmtpClient { ServerCertificateValidationCallback = CertificateValidationCallback }
                 : new SmtpClient();
-                
 
             await smtpClient.ConnectAsync(_credentials.EmailProvider, _credentials.Port, (SecureSocketOptions)_credentials.SecureSocketOptions);
             await smtpClient.AuthenticateAsync(_credentials.Username, _credentials.Password);
@@ -101,11 +100,10 @@ namespace EmailService.v1.Services
         {
             if (errors == SslPolicyErrors.None) return true;
 
-            var host = (string) sender;
+            var host = (string)sender;
 
             if ((errors & SslPolicyErrors.RemoteCertificateNotAvailable) != 0)
                 throw new Exception($"The certificate was not available for {host}.");
-
 
             if ((errors & SslPolicyErrors.RemoteCertificateNotAvailable) != 0)
             {

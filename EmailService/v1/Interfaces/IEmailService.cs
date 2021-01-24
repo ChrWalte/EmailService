@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using EmailService.v1.Entities;
+﻿using EmailService.v1.Entities;
+using System.Threading.Tasks;
 
 namespace EmailService.v1.Interfaces
 {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using EmailService.v1.Enums;
+﻿using EmailService.v1.Enums;
+using System.Collections.Generic;
 
 namespace EmailService.v1.Entities
 {

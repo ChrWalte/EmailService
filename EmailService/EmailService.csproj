@@ -1,7 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionMajor>1</VersionMajor>
+    <VersionMinor>0</VersionMinor>
+    <VersionBuild>1</VersionBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix Condition=" '$(BUILD_BUILDNUMBER)' == '' ">$(VersionMajor).$(VersionMinor).$(VersionBuild)-local</VersionPrefix>
+    <VersionPrefix Condition=" '$(BUILD_BUILDNUMBER)' != '' And '$(Configuration)' == 'Debug'" >$(VersionMajor).$(VersionMinor).$(VersionBuild)-$(BUILD_BUILDNUMBER)-preview</VersionPrefix>
+    <VersionPrefix Condition=" '$(Configuration)' != 'Debug'">$(VersionMajor).$(VersionMinor).$(VersionBuild)</VersionPrefix>
+  </PropertyGroup>
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Christopher M. P. Walters</Authors>
+    <Description>.Net Standard Library used to send emails with plain text, HTML, or rich text. This library will be used in several applications to handle sending emails to users.</Description>
   </PropertyGroup>
 
   <ItemGroup>
