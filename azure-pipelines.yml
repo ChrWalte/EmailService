@@ -1,0 +1,68 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+parameters:
+  - name: 'buildConfiguration'
+    displayName: 'Build Configuration to Use'
+    default: 'Debug'
+    values:
+    - 'Debug'
+    - 'Release'
+
+variables:
+  buildConfiguration: ${{ parameters.buildConfiguration }}
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: 'restore'
+    projects: |
+      EmailService/EmailService.csproj
+      EmailService.Tests/EmailService.Tests.csproj
+    feedsToUse: 'select'
+    vstsFeed: '84b01d8c-663b-4914-8eb1-f49cba57bae1'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: |
+      EmailService/EmailService.csproj
+      EmailService.Tests/EmailService.Tests.csproj
+    versioningScheme: byBuildNumber
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Test'
+  inputs:
+    command: 'test'
+    projects: 'EmailService.Tests/EmailService.Tests.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: 'EmailService/EmailService.csproj'
+    nobuild: true
+    versioningScheme: 'off'
+
+- task: NuGetCommand@2
+  displayName: 'Push'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '84b01d8c-663b-4914-8eb1-f49cba57bae1'
